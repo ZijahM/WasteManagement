@@ -1,0 +1,209 @@
+<head>
+  <title>Waste manager</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.2.1/build/ol.js"></script>
+</head>
+
+<body>
+<!--  {{> navbar}}
+  {{> display}}
+  {{> addForm}}
+  -->
+</body>
+
+<template name='ApplicationLayout'>
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+  {{> yield "addForm"}}
+</template>
+
+
+<!-- <template name="note">
+  <li class="collection-item">
+    {{text}}
+    <a href="#" class="delete-note secondary-content"><button class="brand-logo">delete</button></a>
+  </li>
+</template>-->
+
+<template name="navbar">
+  <div class="container">
+  <nav class="red">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo">Waste Manager</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li class="nav-item">
+            <a href="/maps" class="btn-floating btn-large waves-effect waves-light orange"><i class="material-icons left">map</i></a>
+          </li>
+          <li class="nav-item">
+            <a href="/cards" class="btn-floating btn-large waves-effect waves-light orange"><i class="material-icons left">info</i></a>
+          </li>
+          <li class="nav-item">
+            {{> loginButtons}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </div>
+</template>
+
+<template name="addForm">
+  <div class="container">
+  <form class="add-form">
+      <input type="text" name="text" placeholder="Input text">
+  </form>
+  </div>
+</template>
+
+<template name="maps">
+  <div class="container">
+    <h2>My Map</h2>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([18.41, 43.85]),
+          zoom: 12
+        })
+      });
+
+var vectorSource = new ol.source.Vector;
+
+  var marker = new ol.Feature({
+    geometry: new ol.geom.Point(
+      ol.proj.fromLonLat([18.4165, 43.8594])
+    ),
+  });
+  vectorSource.addFeature (marker);
+
+  var marker2 = new ol.Feature({
+    geometry: new ol.geom.Point(
+      ol.proj.fromLonLat([18.4135, 43.8558])
+    ),
+  });
+  vectorSource.addFeature (marker2);
+
+var markerVectorLayer = new ol.layer.Vector({
+  source: vectorSource,
+});
+map.addLayer(markerVectorLayer);
+    </script>
+  </div>
+</template>
+
+<template name="cards">
+  <div class="container">
+    <p>cards work!</p>
+    <div class="container">
+   <div class="col s12 m7">
+     <div class="card small">
+       <div class="card-image">
+         <img src="images/sample-1.jpg">
+         <span class="card-title">Card Title</span>
+       </div>
+       <div class="card-content">
+         <p>I am a very simple card. I am good at containing small bits of information.
+         I am convenient because I require little markup to use effectively.</p>
+       </div>
+       <div class="card-action">
+         <a href="#">This is a link</a>
+       </div>
+     </div>
+   </div>
+   <div class="col s12 m7">
+     <div class="card small">
+       <div class="card-image">
+         <img src="images/sample-1.jpg">
+         <span class="card-title">Card Title</span>
+       </div>
+       <div class="card-content">
+         <p>I am a very simple card. I am good at containing small bits of information.
+         I am convenient because I require little markup to use effectively.</p>
+       </div>
+       <div class="card-action">
+         <a href="#">This is a link</a>
+       </div>
+     </div>
+   </div>
+   <div class="col s12 m7">
+     <div class="card small">
+       <div class="card-image">
+         <img src="images/sample-1.jpg">
+         <span class="card-title">Card Title</span>
+       </div>
+       <div class="card-content">
+         <p>I am a very simple card. I am good at containing small bits of information.
+         I am convenient because I require little markup to use effectively.</p>
+       </div>
+       <div class="card-action">
+         <a href="#">This is a link</a>
+       </div>
+     </div>
+   </div>
+ </div>
+ </div>
+</template>
+
+<template name="display">
+  <div class="container">
+    {{#if currentUser}}
+    <h1>Latest Notes</h1>
+    <a href="/addForm" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons left">add</i></a>
+  <ul class="collection">
+    {{#each notes}}
+    <li class="collection-item">
+      {{text}}
+      <a href="#" class="delete-note secondary-content"><button class="brand-logo">delete</button></a>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p>Please log in</p>
+     <!-- kartice iz cards -->
+     {{> cards}}
+  {{/if}}
+</div>
+</template>
+
+<template name="displayWithoutAdd">
+  <div class="container">
+    <h1>Latest Notes</h1>
+    {{#if currentUser}}
+  <!--  <a href="/addForm" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons left">add</i></a> -->
+  <ul class="collection">
+    {{#each notes}}
+    <li class="collection-item">
+      {{text}}
+      <a href="#" class="delete-note secondary-content"><button class="brand-logo">delete</button></a>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p>Please log in</p>
+  {{/if}}
+</div>
+</template>
+
+<template name="testnavbar">
+  <div class="container">
+    <div class="topnav">
+      <a href="/" class="brand-logo">Waste Manager</a>
+        <a href="/maps" class="btn-floating btn-large waves-effect waves-light orange"><i class="material-icons left">map</i></a>
+        {{> loginButtons}}
+    </div>
+  </div>
+</template>
